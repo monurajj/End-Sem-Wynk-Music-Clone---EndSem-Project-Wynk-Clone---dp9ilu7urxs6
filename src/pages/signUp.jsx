@@ -58,11 +58,11 @@ function SignInForm({ setToken }) {
     };
 
     return (
-        <div className="loginPage">
+        <div className="signinPage">
             <div className="imageOfLoginPage">
                 <img className="imgJ" src={loginBackground} alt="Login Background" />
             </div>
-            <div className="contentOfloginpage">
+            <div className="contentOfsigninpage">
                 <h1>Sign Up</h1>
                 <p>Get a personalized experience and access all your music</p>
 
