@@ -8,7 +8,6 @@ const Songs = ({ token }) => {
     useEffect(() => {
         fetchVideo();
     }, [id]);
-
     const fetchVideo = async () => {
         try {
             const response = await fetch(`https://academics.newtonschool.co/api/v1/musicx/song/${id}`, {
