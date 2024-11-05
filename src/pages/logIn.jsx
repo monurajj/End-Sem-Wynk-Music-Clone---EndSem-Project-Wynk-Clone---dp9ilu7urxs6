@@ -1,16 +1,45 @@
-import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/styles.css";
-import loginBackground from "../assets/Screenshot 2024-05-19 at 2.50.08 AM.png";
+import loginBackground from '../assets/Screenshot 2024-05-19 at 2.50.08 AM.png';
+import '../css/styles.css';
 
-function SignIn({ setIsLogin, setToken }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const SignIn = ({ setIsLogin, setToken }) => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const validateForm = () => {
+    if (!formData.email || !formData.password) {
+      alert("Please fill in all fields");
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Please enter a valid email address");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const user = { email, password, appType: "music" };
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+
     try {
       const response = await fetch(
         "https://academics.newtonschool.co/api/v1/user/login",
@@ -21,71 +50,82 @@ function SignIn({ setIsLogin, setToken }) {
             projectID: "f104bi07c490",
             accept: "application/json",
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify({
+            ...formData,
+            appType: "music"
+          }),
         }
       );
-      const datas = await response.json();
-      if (datas.status === "fail") {
-        alert("Wrong email or password");
+
+      const data = await response.json();
+
+      if (data.status === "fail") {
+        alert(data.message || "Invalid email or password");
       } else {
         setIsLogin(true);
-        setToken(datas.token);
+        setToken(data.token);
         navigate("/");
       }
     } catch (error) {
+      alert("An error occurred. Please try again later.");
       console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
-  };
-  const handleOpenRegister = () => {
-    navigate("/signup");
   };
 
   return (
-    <>
-      <form>
-        <div className="loginPage">
-          
-          <div className="imageOfLoginPage">
-            <img
-              className="imgJ"
-              src={loginBackground}
-              alt="Login Background"
+    <div className="loginPage">
+      <div className="imageOfLoginPage">
+        <img 
+          className="imgJ" 
+          src={loginBackground} 
+          alt="Login Background"
+        />
+      </div>
+      <div className="contentOfLoginPage">
+        <h1>Log In</h1>
+        <p>Welcome back! Log in to access your account</p>
+
+        <form onSubmit={handleSignIn}>
+          <div className="inputField">
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter Your Email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter Your Password"
+              value={formData.password}
+              onChange={handleInputChange}
             />
           </div>
-          <div className="contentOfLoginPage">
-            <h1>Log In</h1>
-            <p>Welcome back! Log in to access your account</p>
 
-            <div className="inputField">
-              <input
-                id="email"
-                type="email"
-                placeholder="Enter Your Email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                id="password"
-                type="password"
-                placeholder="Enter Your Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="login">
-              <button type="submit" onClick={handleSignIn}>
-                Login
-              </button>
-            </div>
-            <div className="dontHaveAccount">
-              <p>
-                Don't have an account?{" "}
-                <span onClick={() => navigate("/signup")}>Sign Up</span>
-              </p>
-            </div>
+          <div className="login">
+            <button 
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Signing in..." : "Login"}
+            </button>
           </div>
-        </div>
-      </form>
-    </>
+
+          <div className="dontHaveAccount">
+            <p>
+              Don't have an account?{" "}
+              <span onClick={() => navigate("/signup")}>Sign Up</span>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
   );
-}
+};
 
 export default SignIn;

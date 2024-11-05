@@ -1,111 +1,148 @@
-import * as React from "react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import loginBackground from '../assets/Screenshot 2024-05-19 at 2.50.08 AM.png'
-import '../css/styles.css'
+import { useNavigate } from "react-router-dom";
+import loginBackground from '../assets/Screenshot 2024-05-19 at 2.50.08 AM.png';
+import '../css/styles.css';
 
-function ImageBanner({ src, alt }) {
-    return <img loading="lazy" src={src} alt={alt} className="image-css h-60px object-cover absolute inset-0 size-full" />;
-}
+const SignUp = ({ setToken }) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-function SignInForm({ setToken }) {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    // const [rePass, setRePass] = useState("");
-    const navigate = useNavigate();
-
-    const handleSignUp = async (e) => {
-        e.preventDefault();
-        if (!name || !email || !password ) {
-            alert('All fields are required');
-            return;
-        }
-        if (!email.includes('@')) {
-            alert('Email must have "@"');
-            return;
-        }
-        if (password.length < 6 || !/[a-z]/.test(password) || !/[A-Z]/.test(password) || !/[!@#$%^&*()_]/.test(password)) {
-            alert('Password must be at least 6 characters long and include both lower and uppercase letters and symbols');
-            return;
-        }
-        
+  const validateForm = () => {
+    if (!formData.name || !formData.email || !formData.password) {
+      alert("All fields are required");
+      return false;
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const newUser = { email, password, name, appType: "music" };
-        try {
-            const response = await fetch('https://academics.newtonschool.co/api/v1/user/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'projectID': 'f104bi07c490',
-                    'accept': 'application/json'
-                },
-                body: JSON.stringify(newUser)
-            });
-            const datas = await response.json();
-            if (datas.status === "fail") {
-                alert("email already exists.")
-            } else {
-                setToken(datas.token)
-                navigate('/signin')
-            }
-        } catch (error) {
-            console.error('Error:', error);
+    if (!formData.email.includes('@')) {
+      alert("Please enter a valid email address");
+      return false;
+    }
+
+    // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_]).{6,}$/;
+    // if (!passwordRegex.test(formData.password)) {
+    //   alert("Password must be at least 6 characters long and include lowercase, uppercase, and special characters");
+    //   return false;
+    // }
+
+    return true;
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+    if (error) setError("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        "https://academics.newtonschool.co/api/v1/user/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            projectID: "f104bi07c490",
+            accept: "application/json"
+          },
+          body: JSON.stringify({
+            ...formData,
+            appType: "music"
+          })
         }
-    };
+      );
 
-    return (
-        <div className="signinPage">
-            <div className="imageOfLoginPage">
-                <img className="imgJ" src={loginBackground} alt="Login Background" />
-            </div>
-            <div className="contentOfsigninpage">
-                <h1>Sign Up</h1>
-                <p>Get a personalized experience and access all your music</p>
+      const data = await response.json();
 
-                <div className="inputField">
-                    <input
-                        type="text"
-                        placeholder="Enter Your Name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <input
-                        type="email"
-                        placeholder="Enter Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <input
-                        type="password"
-                        placeholder="Enter Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    
-                </div>
-                <div className="login">
-                    <button onClick={handleSubmit}>Sign Up</button>
-                </div>
-                <div className="dontHaveAccount">
-                    <p>
-                        Already have an account? <span onClick={() => navigate('/signin')}>Log In</span>
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-}
+      if (data.status === "fail") {
+        alert(data.message || "Email already exists");
+      } else {
+        setToken(data.token);
+        navigate("/signin");
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again later.");
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-function SignIn({ setToken }) {
-    return (
-        <div className="loginPage">
-            <SignInForm setToken={setToken} />
-        </div>
-    );
-}
+  return (
+    <div className="signinPage">
+      <div className="imageOfLoginPage">
+        <img 
+          className="imgJ" 
+          src={loginBackground} 
+          alt="Login Background" 
+        />
+      </div>
+      
+      <div className="contentOfsigninpage">
+        <h1>Sign Up</h1>
+        <p>Get a personalized experience and access all your music</p>
 
-export default SignIn;
+        <form onSubmit={handleSubmit}>
+          <div className="inputField">
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter Your Name"
+              value={formData.name}
+              onChange={handleInputChange}
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter Email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter Password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
+            <small className="password-hint">
+              Password must be at least 6 characters with lowercase, uppercase, and special characters
+            </small>
+          </div>
+
+          <div className="login">
+            <button 
+              type="submit" 
+              disabled={isLoading}
+            >
+              {isLoading ? "Creating Account..." : "Sign Up"}
+            </button>
+          </div>
+
+          <div className="dontHaveAccount">
+            <p>
+              Already have an account?{" "}
+              <span onClick={() => navigate("/signin")}>Log In</span>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;
