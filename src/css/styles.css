@@ -1,8 +1,15 @@
+/* styles.css */
+
+/* Base styles for the body */
 body {
   background-color: black;
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
-.loginPage {
-  position: relative;
+
+/* Styles for the loginPage */
+.loginPage,
+.signinPage {
   display: flex;
   flex-direction: row;
   background-color: rgb(56, 55, 55);
@@ -10,42 +17,35 @@ body {
   width: 900px;
   margin: 2% 0 0 15%;
   border-radius: 10px;
- 
-}
-.signinPage{
+  overflow: hidden;
   position: relative;
-  display: flex;
-  flex-direction: row;
-  background-color: rgb(56, 55, 55);
-  height: 700px;
-  width: 900px;
-  /* margin: 2% 0 0 15%; */
-  border-radius: 10px;
- 
 }
 
-.contentOfLoginPage {
+.contentOfLoginPage,
+.contentOfsigninpage {
   margin-top: 30px;
   margin-left: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: white;
 }
-.contentOfsigninpage{
-  margin-top: 30px;
-  margin-left: 50px;
-}
+
+.imageOfLoginPage,
 .imageOfloginpage {
   width: 50%;
-  height: auto;
+  height: 100%;
 }
 
 .imgJ {
   height: 100%;
   width: 100%;
+  object-fit: cover;
 }
 
 h1 {
-  color: white;
   font-size: 50px;
-font-weight: bold;
+  font-weight: bold;
 }
 
 p {
@@ -59,15 +59,11 @@ p {
 
 input {
   padding: 25px;
-  margin: 20px;
+  margin: 10px;
   background-color: black;
   color: rgb(150, 143, 143);
-  border: 0px solid;
+  border: none;
   border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
 }
 
 .login {
@@ -83,6 +79,7 @@ button {
   width: 80px;
   border-radius: 10px;
   border: none;
+  cursor: pointer;
 }
 
 .dontHaveAccount {
@@ -92,40 +89,44 @@ button {
 
 span {
   color: red;
+  cursor: pointer;
 }
 
 span:hover {
-  cursor: pointer;
   font-weight: bold;
   color: #ff0000;
   transform: scale(1.5);
   text-shadow: 5px 5px 5px rgba(59, 76, 64, 0.614);
 }
 
-
 /* Media query for smaller screens */
-@media (max-width: 768px) {
-  .loginPage {
-    flex-direction: column;
-    align-items: center;
-    width: 90%;
+@media (max-width: 1024px) {
+  .loginPage,
+  .signinPage {
+    width: 80%;
     margin: 5% auto;
     height: auto;
+    flex-direction: column;
+    border-radius: 15px;
   }
 
+  .imageOfLoginPage,
   .imageOfloginpage {
     width: 100%;
+    height: 50%;
   }
 
-  .contentOfloginpage {
-    margin-left: 0;
+  .contentOfLoginPage,
+  .contentOfsigninpage {
+    margin: 20px;
     margin-top: 20px;
+    align-items: center;
     width: 90%;
     text-align: center;
   }
 
   .inputField {
-    margin: 20px auto;
+    margin: 10px auto;
     width: 100%;
   }
 
@@ -139,6 +140,49 @@ span:hover {
   }
 
   .dontHaveAccount {
-    margin: 20px auto 50px auto;
+    margin: 20px auto;
+  }
+}
+
+/* Media query for mobile screens */
+@media (max-width: 768px) {
+  .loginPage,
+  .signinPage {
+    width: 95%;
+    height: auto;
+    margin: 10% auto;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .imageOfLoginPage,
+  .imageOfloginpage {
+    width: 100%;
+    height: 40%;
+  }
+
+  .contentOfLoginPage,
+  .contentOfsigninpage {
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  .inputField {
+    width: 100%;
+    margin: 15px auto;
+  }
+
+  input {
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  .login {
+    margin: 20px auto 30px auto;
+  }
+
+  .dontHaveAccount {
+    margin: 20px auto;
   }
 }
