@@ -129,7 +129,7 @@ const SignUp = ({ setToken }) => {
               type="submit" 
               disabled={isLoading}
             >
-              {isLoading ? "Creating Account..." : "Sign Up"}
+              {isLoading ? "Signing Up..." : "Sign Up"}
             </button>
           </div>
 
