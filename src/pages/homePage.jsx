@@ -193,28 +193,27 @@ const HomePage = ({ isLogin, setIsLogin }) => {
   return (
     <main className="flex flex-col  bg-black">
       <header className="sticky top-[-8px] flex flex-col w-full bg-black bg-opacity-0">
-  <div className="flex items-center justify-between w-full px-4 py-2">
-    <img
-      src={headingImage}
-      alt="Right side image"
-      className="md:w-[260px] h-[75px] w-[230px]"
-    />
-    <div className="flex-grow h-[75px] bg-black"></div>
+        <div className="flex items-center justify-between w-full px-4 ">
+          <img
+            src={headingImage}
+            alt="Right side image"
+            className="md:w-[260px] h-[75px] w-[230px]"
+          />
+          <div className="flex-grow h-[75px] bg-black"></div>
 
-    <button
-      onClick={handleSignIn}
-      className="flex items-center h-[75px] py-2 bg-black border"
-    >
-      <img
-        src={adminImage}
-        alt="Admin icon"
-        className="h-[15px] w-[15px] mr-[8px]"
-      />
-      {isLogin ? "Log Out" : "Log In"}
-    </button>
-  </div>
-</header>
-
+          <button
+            onClick={handleSignIn}
+            className="flex items-center h-[75px] py-2 bg-black rounded-bottom-2 "
+          >
+            <img
+              src={adminImage}
+              alt="Admin icon"
+              className="h-[15px] w-[15px]"
+            />
+            {isLogin ? "Log Out" : "Log In"}
+          </button>
+        </div>
+      </header>
 
       {/* --------------------------------Trending-------------------------- */}
 
