@@ -112,7 +112,7 @@ const SignIn = ({ setIsLogin, setToken }) => {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Login"}
+              {isLoading ? "Signing in..." : "Log In"}
             </button>
           </div>
 
