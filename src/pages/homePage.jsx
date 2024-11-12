@@ -208,7 +208,7 @@ const HomePage = ({ isLogin, setIsLogin }) => {
             <img
               src={adminImage}
               alt="Admin icon"
-              className="h-[15px] w-[15px]"
+              className="h-[15px] w-[15px] mr-2"
             />
             {isLogin ? "Log Out" : "Log In"}
           </button>
